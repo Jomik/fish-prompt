@@ -1,3 +1,5 @@
+# Credit to https://gist.github.com/britishtea/39ad478fa5180e1432a2
+
 set -q jomik_git_branch_glyph
 or set -g jomik_git_branch_glyph ""
 
