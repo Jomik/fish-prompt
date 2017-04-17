@@ -1,12 +1,6 @@
 set -q jomik_prompt_arrow_glyph
 or set -g jomik_prompt_arrow_glyph ""
 
-set -q jomik_project_root_glyph
-or set -g jomik_project_root_glyph "⊤"
-
-set -q jomik_git_branch_glyph
-or set -g jomik_git_branch_glyph ""
-
 function __jomik_prompt_segment
   set_color $argv[1]
   echo -ns "[" $argv[2..-1] "]"
@@ -28,9 +22,12 @@ function __jomik_path_to_prompt_fit
     end
 end
 
-
-function __jomik_git_branch_name
-  echo (command git branch ^/dev/null | sed -n '/\* /s///p')
+function __jomik_in_git_dir
+  if type -q git
+    command git rev-parse --is-inside-work-tree >/dev/null 2>&1
+  else
+    return 1
+  end
 end
 
 function __jomik_git_root
@@ -44,22 +41,15 @@ end
 function __jomik_git_relative_path
   set -l rel (command realpath --relative-to=(__jomik_git_root) $PWD)
   if test "$rel" != "."
-    echo -ns "/" $rel
-  end
-end
-
-function __jomik_prompt_git
-  set -l git_branch (__jomik_git_branch_name)
-  if test $git_branch
-    set -l proj_name (__jomik_git_project_name)
-    __jomik_prompt_segment blue $proj_name " " $jomik_git_branch_glyph " " $git_branch
+    echo -s "/" $rel
   end
 end
 
 function __jomik_prompt_dir
-  if test (__jomik_git_branch_name)
+  if __jomik_in_git_dir
     set -l rel_path (__jomik_git_relative_path)
-    __jomik_prompt_segment cyan $jomik_project_root_glyph (__jomik_path_to_prompt_fit $rel_path)
+    set -l proj_name (__jomik_git_project_name)
+    __jomik_prompt_segment cyan $proj_name (__jomik_path_to_prompt_fit $rel_path)
   else
     __jomik_prompt_segment cyan (prompt_pwd)
   end
@@ -75,17 +65,8 @@ function __jomik_prompt_arrow
   echo -ns $jomik_prompt_arrow_glyph " "
 end
 
-function __jomik_prompt_status_line
-  type -q git; and __jomik_prompt_git
-end
-
 function fish_prompt
   set -g last_status $status
-
-  set -l status_line (__jomik_prompt_status_line)
-  if test $status_line
-    echo $status_line
-  end
 
   __jomik_prompt_dir
   __jomik_prompt_error
