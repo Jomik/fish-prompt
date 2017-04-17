@@ -4,7 +4,7 @@ function __jomik_prompt_segment
   set_color normal
 end
 
-function __path_to_prompt_fit
+function __jomik_path_to_prompt_fit
     set -q fish_prompt_pwd_dir_length
     or set -l fish_prompt_pwd_dir_length 1
 
@@ -39,15 +39,15 @@ end
 function __jomik_prompt_git
   set -l git_branch (__jomik_git_branch_name)
   if test $git_branch
-    set -l $proj_name __jomik_git_project_name
-    __jomik_prompt_segment blue $proj_name " @" $git_branch
+    set -l proj_name (__jomik_git_project_name)
+    __jomik_prompt_segment blue $proj_name " @ " $git_branch
   end
 end
 
 function __jomik_prompt_dir
   if test (__jomik_git_branch_name)
     set -l rel_path (__jomik_git_relative_path)
-    __jomik_prompt_segment cyan $rel_path
+    __jomik_prompt_segment cyan (__jomik_path_to_prompt_fit $rel_path)
   else
     __jomik_prompt_segment cyan (prompt_pwd)
   end
