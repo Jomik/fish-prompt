@@ -63,5 +63,5 @@ function fish_prompt
   __jomik_prompt_dir
   __jomik_prompt_arrow
 
-  set_color_normal
+  set_color normal
 end
