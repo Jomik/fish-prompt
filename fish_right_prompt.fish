@@ -53,7 +53,6 @@ function fish_right_prompt
         echo -ns " " $jomik_git_pull_glyph
       end
     end
-  end
 
   set -l untracked (count (git ls-files --others --exclude-standard ^/dev/null))
   if test $untracked -ne 0
@@ -64,4 +63,5 @@ function fish_right_prompt
   set_color blue
   echo -n "]"
   set_color normal
+  end
 end
