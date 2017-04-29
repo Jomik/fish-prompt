@@ -34,8 +34,12 @@ function fish_right_prompt
         command git rev-parse --abbrev-ref '@{upstream}' >/dev/null ^&1
         and set -l has_upstream
         if set -q has_upstream
-            set -l commit_counts (command git rev-list --left-right --count 'HEAD...@{upstream}' ^/dev/null)
+            # Get upstream and current branch
+            set -l origin_current (string split '/' (command git rev-parse --symbolic-full-name --abbrev-ref '@{upstream}'))
+            # Slightly hacky?
+            test -n (command git fetch $origin_current >/dev/null ^&1 &)
 
+            set -l commit_counts (command git rev-list --left-right --count 'HEAD...@{upstream}' ^/dev/null)
             set -l commits_to_push (echo $commit_counts | cut -f 1 ^/dev/null)
             set -l commits_to_pull (echo $commit_counts | cut -f 2 ^/dev/null)
 
