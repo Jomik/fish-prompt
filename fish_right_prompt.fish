@@ -37,7 +37,7 @@ function fish_right_prompt
             # Get upstream and current branch
             set -l origin_current (string split '/' (command git rev-parse --symbolic-full-name --abbrev-ref '@{upstream}'))
             # Slightly hacky?
-            test -n (command git fetch $origin_current >/dev/null ^&1 &)
+            command echo | fish -c 'git fetch $origin_current & disown (jobs -p)'
 
             set -l commit_counts (command git rev-list --left-right --count 'HEAD...@{upstream}' ^/dev/null)
             set -l commits_to_push (echo $commit_counts | cut -f 1 ^/dev/null)
