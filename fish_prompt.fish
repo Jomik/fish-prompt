@@ -24,7 +24,7 @@ end
 
 function __jomik_in_git_dir
     if type -q git
-        command git rev-parse --is-inside-work-tree >/dev/null 2>&1
+        test (command git rev-parse --is-inside-work-tree ^/dev/null; or echo "false") = "true"
     else
         return 1
     end
