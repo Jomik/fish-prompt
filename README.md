@@ -7,7 +7,7 @@ My prompt for [fish shell].
 With [fisherman]
 
 ```
-fisher jomik/jomik-fish-prompt
+fisher jomik/fish-prompt
 ```
 
 [fish shell]: http://fishshell.com/
