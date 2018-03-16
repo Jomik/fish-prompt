@@ -15,7 +15,7 @@ function fish_right_prompt
         and command git rev-parse --is-inside-work-tree >/dev/null 2>&1
         # Branch name or revision hash
         set -l branch (git symbolic-ref --short HEAD ^/dev/null; or git show-ref --head -s --abbrev | head -n1 ^/dev/null)
-        set_color blue
+        set_color $fish_color_cwd
         echo -n "["
         command git diff-files --quiet --ignore-submodules ^/dev/null
         or set -l has_unstaged_files
@@ -23,9 +23,9 @@ function fish_right_prompt
         or set -l has_staged_files
 
         if set -q has_unstaged_files
-            set_color red
+            set_color $fish_color_error
         else if set -q has_staged_files
-            set_color yellow
+            set_color $fish_color_operator
         end
         echo -ns $jomik_git_branch_glyph
         echo -n " $branch"
@@ -40,18 +40,18 @@ function fish_right_prompt
 
             if test $commits_to_push -ne 0
                 if test $commits_to_pull -ne 0
-                    set_color red
+                    set_color $fish_color_error
                 else
-                    set_color yellow
+                    set_color $fish_color_operator
                 end
                 echo -ns " $jomik_git_push_glyph"
             end
 
             if test $commits_to_pull -ne 0
                 if test $commits_to_push -ne 0
-                    set_color red
+                    set_color $fish_color_error
                 else
-                    set_color yellow
+                    set_color $fish_color_operator
                 end
                 echo -ns " $jomik_git_pull_glyph"
             end
@@ -59,12 +59,12 @@ function fish_right_prompt
 
         set -l untracked (count (git ls-files --others --exclude-standard ^/dev/null))
         if test $untracked -ne 0
-            set_color purple
+            set_color $fish_color_error
             echo -ns " ($untracked)"
         end
 
-        set_color blue
+        set_color $fish_color_cwd
         echo -n "]"
-        set_color normal
+        set_color $fish_color_normal
     end
 end

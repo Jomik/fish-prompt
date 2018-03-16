@@ -49,15 +49,15 @@ function __jomik_prompt_dir
     if __jomik_in_git_dir
         set -l rel_path (__jomik_git_relative_path)
         set -l proj_name (__jomik_git_project_name)
-        __jomik_prompt_segment cyan $proj_name (__jomik_path_to_prompt_fit $rel_path)
+        __jomik_prompt_segment $fish_color_cwd $proj_name (__jomik_path_to_prompt_fit $rel_path)
     else
-        __jomik_prompt_segment cyan (prompt_pwd)
+        __jomik_prompt_segment $fish_color_cwd (prompt_pwd)
     end
 end
 
 function __jomik_prompt_error
     if test "$last_status" -ne 0
-        __jomik_prompt_segment red $last_status
+        __jomik_prompt_segment $fish_color_error $last_status
     end
 end
 
